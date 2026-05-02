@@ -1,0 +1,105 @@
+.tableContainer {
+	overflow-x: auto;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.table th,
+.table td {
+	padding: 12px 8px;
+	text-align: left;
+	border-bottom: 1px solid #eee;
+}
+
+.table th {
+	background-color: #2c3e50;
+	color: white;
+	font-weight: 600;
+}
+
+.statusBadge {
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.pending {
+	background-color: #f39c12;
+	color: white;
+}
+
+.uploaded {
+	background-color: #27ae60;
+	color: white;
+}
+
+.fileCell {
+	min-width: 200px;
+}
+
+.fileInput {
+	margin-right: 8px;
+}
+
+.fileName {
+	font-size: 11px;
+	color: #666;
+	display: block;
+	margin-top: 4px;
+}
+
+.actionCell {
+	width: 100px;
+}
+
+.uploadBtn {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.uploadBtn:hover {
+	background-color: #2980b9;
+}
+
+.uploadBtn:disabled {
+	background-color: #95a5a6;
+	cursor: not-allowed;
+}
+
+.previewCell {
+	width: 80px;
+}
+
+.previewLink {
+	color: #3498db;
+	text-decoration: none;
+}
+
+.previewLink:hover {
+	text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+	.fileCell {
+		min-width: 150px;
+	}
+	
+	.fileInput {
+		width: 100%;
+	}
+	
+	.uploadBtn {
+		width: 100%;
+	}
+}
