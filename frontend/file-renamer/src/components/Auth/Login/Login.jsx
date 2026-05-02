@@ -12,7 +12,7 @@ const Login = () => {
 	const [emailError, setEmailError] = useState('');
 	const [passwordError, setPasswordError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	
+
 	const { login } = useAuth();
 
 	const handleEmailChange = (e) => {
@@ -44,12 +44,9 @@ const Login = () => {
 		setError('');
 		setIsLoading(true);
 
-		// Eliminar cookie token existente antes de login
-		document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
 		try {
 			const result = await login(email, password);
-			
+
 			if (result.success) {
 				navigate('/dashboard');
 			} else {
@@ -67,7 +64,7 @@ const Login = () => {
 			<div className="login__card">
 				<h1 className="login__title">File Renamer</h1>
 				<h2 className="login__subtitle">Iniciar Sesión</h2>
-				
+
 				<form className="login__form" onSubmit={handleSubmit} noValidate>
 					<div className="login__field">
 						<label className="login__label">Email</label>
@@ -79,7 +76,7 @@ const Login = () => {
 						/>
 						{emailError && <span className="login__field-error">{emailError}</span>}
 					</div>
-					
+
 					<div className="login__field">
 						<label className="login__label">Contraseña</label>
 						<input
@@ -90,9 +87,9 @@ const Login = () => {
 						/>
 						{passwordError && <span className="login__field-error">{passwordError}</span>}
 					</div>
-					
+
 					{error && <div className="login__error">{error}</div>}
-					
+
 					<button
 						type="submit"
 						className="login__button"
@@ -100,7 +97,7 @@ const Login = () => {
 					>
 						{isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
 					</button>
-					
+
 					<button
 						type="button"
 						className="login__link-button"

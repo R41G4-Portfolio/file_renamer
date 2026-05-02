@@ -15,6 +15,17 @@ const handleResponse = async (response) => {
 };
 
 /*
+ * Maneja respuestas Blob (archivos)
+ */
+const handleBlobResponse = async (response) => {
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || 'Error en la petición');
+	}
+	return response.blob();
+};
+
+/*
  * Objeto api que agrupa todas las peticiones HTTP al backend
  */
 export const api = {
@@ -45,7 +56,7 @@ export const api = {
 		const response = await fetch(`${API_URL}/auth/login`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			credentials: 'include',
+			credentials: 'include',  // ← Esto es clave
 			body: JSON.stringify(credentials)
 		});
 		return handleResponse(response);
@@ -133,16 +144,14 @@ export const api = {
 	 * PUT /templates/:id/assign
 	 * Asigna un usuario DOWNLOADER a una plantilla
 	 * @param {string} templateId - ID de la plantilla
-	 * @param {string} userId - ID del usuario DOWNLOADER
+	 * @param {string} email - Email del usuario DOWNLOADER
 	 */
 	assignTemplate: async (templateId, email) => {
-		console.log('API assignTemplate - email:', email);  // ← DEBUG
-		
 		const response = await fetch(`${API_URL}/templates/${templateId}/assign`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include',
-			body: JSON.stringify({ email })  // ← debe ser { email: "usuario@mail.com" }
+			body: JSON.stringify({ email })
 		});
 		return handleResponse(response);
 	},
@@ -242,14 +251,32 @@ export const api = {
 			throw new Error(error.error || 'Error al descargar ZIP');
 		}
 		
-		return response.blob();  // Devuelve el archivo como Blob para descargar
+		return response.blob();
 	},
 
+	/*
+	   DOWNLOADER PANEL
+	 * GET /templates/my-assigned
+	 * Obtiene las plantillas asignadas al usuario DOWNLOADER
+	 */
 	getMyAssignedTemplates: async () => {
 		const response = await fetch(`${API_URL}/templates/my-assigned`, {
 			method: 'GET',
 			credentials: 'include'
 		});
-	return handleResponse(response);
-}
+		return handleResponse(response);
+	},
+
+	/*
+	   ADMIN AUDITORÍA
+	 * GET /audit
+	 * Obtiene los logs de auditoría (solo ADMIN)
+	 */
+	getAuditLogs: async () => {
+		const response = await fetch(`${API_URL}/audit`, {
+			method: 'GET',
+			credentials: 'include'
+		});
+		return handleResponse(response);
+	}
 };

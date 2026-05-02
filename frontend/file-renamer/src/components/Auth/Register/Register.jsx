@@ -10,13 +10,13 @@ const Register = () => {
 		name: '',
 		email: '',
 		password: '',
-		role: 'DOWNLOADER'  // ← fijo, no se muestra
+		role: 'DOWNLOADER'
 	});
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [fieldErrors, setFieldErrors] = useState({});
-	
+
 	const { register } = useAuth();
 
 	const handleChange = (e) => {
@@ -41,7 +41,7 @@ const Register = () => {
 
 		setIsLoading(true);
 		const registerResult = await register(formData);
-		
+
 		if (registerResult.success) {
 			setSuccess('Usuario registrado correctamente');
 			setTimeout(() => {
@@ -50,7 +50,7 @@ const Register = () => {
 		} else {
 			setError(registerResult.error || 'Error al registrar usuario');
 		}
-		
+
 		setIsLoading(false);
 	};
 
@@ -59,7 +59,7 @@ const Register = () => {
 			<div className="register__card">
 				<h1 className="register__title">File Renamer</h1>
 				<h2 className="register__subtitle">Registro de Usuario</h2>
-				
+
 				<form className="register__form" onSubmit={handleSubmit}>
 					<div className="register__field">
 						<label className="register__label">Nombre</label>
@@ -72,7 +72,7 @@ const Register = () => {
 						/>
 						{fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
 					</div>
-					
+
 					<div className="register__field">
 						<label className="register__label">Email</label>
 						<input
@@ -84,7 +84,7 @@ const Register = () => {
 						/>
 						{fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
 					</div>
-					
+
 					<div className="register__field">
 						<label className="register__label">Contraseña</label>
 						<input
@@ -96,12 +96,10 @@ const Register = () => {
 						/>
 						{fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
 					</div>
-					
-					{/* ELIMINAR ESTE BLOQUE - Ya no hay select de rol */}
-					
+
 					{error && <div className="register__error">{error}</div>}
 					{success && <div className="register__success">{success}</div>}
-					
+
 					<button
 						type="submit"
 						className="register__button"
@@ -109,7 +107,7 @@ const Register = () => {
 					>
 						{isLoading ? 'Registrando...' : 'Registrarse'}
 					</button>
-					
+
 					<button
 						type="button"
 						className="register__link-button"

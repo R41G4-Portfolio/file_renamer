@@ -10,65 +10,65 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
-	// Verificar autenticación al cargar la app
 	useEffect(() => {
-		const checkAuth = async () => {
-			try {
-				const userData = await api.getPerfil();
-				setUser(userData);
-				setIsAuthenticated(true);
-			} catch (error) {
-				setIsAuthenticated(false);
-				setUser(null);
-			} finally {
-				setLoading(false);
-			}
-		};
-		checkAuth();
+		const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith('token='));
+		
+		if (!hasCookie) {
+			setLoading(false);
+			return;
+		}
+		
+		// No validamos la cookie con el backend, solo asumimos que es válida
+		setIsAuthenticated(true);
+		setLoading(false);
 	}, []);
 
-	// Iniciar sesión
 	const login = async (email, password) => {
 		try {
-			// Primero intentar cerrar sesión (limpia cookie en backend)
-			await fetch('http://localhost:5000/auth/logout', {
-				method: 'POST',
-				credentials: 'include'
-			});
+			// Limpiar cookie existente
+			document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 			
-			const result = await api.login({ email, password });
+			const response = await api.login({ email, password });
 			
-			if (result.message && result.message.includes('Sesión iniciada')) {
-				const userData = await api.getPerfil();
-				setUser(userData);
+			if (response.success && response.data) {
+				// Los datos vienen directamente del login
+				setUser({
+					name: response.data.name,
+					email: response.data.email,
+					role: response.data.role
+				});
 				setIsAuthenticated(true);
 				return { success: true };
 			}
 			
-			return { success: false, error: result.error };
+			return { success: false, error: response.message };
 		} catch (error) {
-			return { success: false, error: 'Error de conexión' };
+			console.error('Error en login:', error);
+			return { success: false, error: error.message };
 		}
 	};
 
-	// Registrar usuario
 	const register = async (userData) => {
 		try {
-			await api.register(userData);
-			return { success: true };
+			const response = await api.register(userData);
+			if (response.success) {
+				return { success: true };
+			}
+			return { success: false, error: response.message };
 		} catch (error) {
 			return { success: false, error: error.message };
 		}
 	};
 
-	// Cerrar sesión
 	const logout = async () => {
 		try {
 			await api.logout();
-			setUser(null);
-			setIsAuthenticated(false);
 		} catch (error) {
 			console.error('Error en logout:', error);
+		} finally {
+			setIsAuthenticated(false);
+			setUser(null);
+			document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 		}
 	};
 

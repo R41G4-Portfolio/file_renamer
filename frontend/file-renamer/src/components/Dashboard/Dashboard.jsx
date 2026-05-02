@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import Spinner from '../Spinner';
-import TemplateTable from './TemplatesTable';
-import TemplateDetails from './TemplateDetails';
 import { api } from '../../services/api';
+import TemplatesTable from './TemplatesTable';
+import Swal from 'sweetalert2';
+import Spinner from '../Spinner';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -12,8 +12,6 @@ const Dashboard = () => {
 	const { user, logout } = useAuth();
 	const [loading, setLoading] = useState(true);
 	const [templates, setTemplates] = useState([]);
-	const [selectedTemplateId, setSelectedTemplateId] = useState(null);
-	const [showDetails, setShowDetails] = useState(false);
 
 	useEffect(() => {
 		if (user) {
@@ -23,10 +21,13 @@ const Dashboard = () => {
 
 	const fetchTemplates = async () => {
 		try {
-			const data = await api.getTemplates();
-			setTemplates(data);
+			const response = await api.getTemplates();
+			if (response.success && response.data) {
+				setTemplates(response.data);
+			}
 		} catch (error) {
 			console.error('Error:', error);
+			Swal.fire('Error', error.message || 'No se pudieron cargar las plantillas', 'error');
 		} finally {
 			setLoading(false);
 		}
@@ -37,18 +38,7 @@ const Dashboard = () => {
 		navigate('/login');
 	};
 
-	const handleViewDetails = (templateId) => {
-		setSelectedTemplateId(templateId);
-		setShowDetails(true);
-	};
-
-	const handleCloseDetails = () => {
-		setShowDetails(false);
-		setSelectedTemplateId(null);
-	};
-
-	if (loading)
-		return <Spinner />;
+	if (loading) return <Spinner />;
 
 	return (
 		<div className="dashboard">
@@ -66,7 +56,7 @@ const Dashboard = () => {
 			<main className="dashboard__main">
 				<div className="dashboard__actions">
 					{(user?.role === 'ADMIN' || user?.role === 'UPLOADER') && (
-						<button 
+						<button
 							className="dashboard__create-btn"
 							onClick={() => navigate('/upload')}
 						>
@@ -75,26 +65,11 @@ const Dashboard = () => {
 					)}
 				</div>
 
-				<TemplateTable 
-					templates={templates} 
+				<TemplatesTable
+					templates={templates}
 					user={user}
-					onViewDetails={handleViewDetails}
 					onRefresh={fetchTemplates}
 				/>
-
-				{/* Modal de detalles (no ruta, no URL expuesta) */}
-				{showDetails && (
-					<div className="modal-overlay" onClick={handleCloseDetails}>
-						<div className="modal-content modal-content--large" onClick={(e) => e.stopPropagation()}>
-							<button className="modal-close" onClick={handleCloseDetails}>✕</button>
-							<TemplateDetails 
-								templateId={selectedTemplateId}
-								onClose={handleCloseDetails}
-								onRefresh={fetchTemplates}
-							/>
-						</div>
-					</div>
-				)}
 			</main>
 		</div>
 	);
