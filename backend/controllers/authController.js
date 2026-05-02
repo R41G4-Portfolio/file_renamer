@@ -25,7 +25,7 @@ export const register = async (req, res) => {
 		}
 
 		// Crear usuario (escritura)
-		const user = await createUser({ email, password, name, role });
+		const user = await createUser({ email, password, name, role: 'DOWNLOADER' });
 		
 		// Registrar auditoría
 		await logAudit(user.id, 'REGISTER', req);
