@@ -1,0 +1,34 @@
+# Backend - Archivos subidos
+backend/uploads/
+backend/uploads/templates/
+backend/uploads/documents/
+backend/uploads/output/
+backend/uploads/temp/
+
+# Frontend - Build
+frontend/dist/
+frontend/.vite/
+
+# Backend - Logs y temp
+backend/logs/
+*.log
+*.tmp
+
+# Backend - Dependencias
+backend/node_modules/
+
+# Frontend - Dependencias
+frontend/node_modules/
+
+# Variables de entorno
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
