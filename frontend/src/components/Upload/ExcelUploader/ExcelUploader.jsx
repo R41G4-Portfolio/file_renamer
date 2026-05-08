@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './ExcelUploader.css';
 
 const ExcelUploader = ({ navigate }) => {
 	const [file, setFile] = useState(null);

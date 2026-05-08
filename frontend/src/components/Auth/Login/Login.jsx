@@ -2,13 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { loginSchema } from '../../../utils/validations';
-
-// Importación de constantes
-import { IMAGES } from '../../../constants/images';
-import { INTERNAL_ROUTES } from '../../../constants/routes';
-import { PAGE_META } from '../../../constants/meta';
-import { getUserMessage } from '../../../constants/responseCodes';
-import HelmetMeta from '../../common/HelmetMeta'; // Tu componente para SEO
+import './Login.css';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -18,22 +12,31 @@ const Login = () => {
 	const [emailError, setEmailError] = useState('');
 	const [passwordError, setPasswordError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-
+	
 	const { login } = useAuth();
 
-	// Validaciones en tiempo real (Zod)
 	const handleEmailChange = (e) => {
 		const value = e.target.value;
 		setEmail(value);
 		const result = loginSchema.safeParse({ email: value, password });
-		setEmailError(!result.success ? result.error.flatten().fieldErrors?.email?.[0] : '');
+		if (!result.success) {
+			const flattened = result.error.flatten();
+			setEmailError(flattened.fieldErrors?.email?.[0] || '');
+		} else {
+			setEmailError('');
+		}
 	};
 
 	const handlePasswordChange = (e) => {
 		const value = e.target.value;
 		setPassword(value);
 		const result = loginSchema.safeParse({ email, password: value });
-		setPasswordError(!result.success ? result.error.flatten().fieldErrors?.password?.[0] : '');
+		if (!result.success) {
+			const flattened = result.error.flatten();
+			setPasswordError(flattened.fieldErrors?.password?.[0] || '');
+		} else {
+			setPasswordError('');
+		}
 	};
 
 	const handleSubmit = async (e) => {
@@ -41,93 +44,73 @@ const Login = () => {
 		setError('');
 		setIsLoading(true);
 
+		// Eliminar cookie token existente antes de login
+		document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
 		try {
 			const result = await login(email, password);
+			
 			if (result.success) {
-				navigate(INTERNAL_ROUTES.DASHBOARD);
+				navigate('/dashboard');
 			} else {
-				// Aquí usamos tu función getUserMessage para transformar el error del backend
-				setError(getUserMessage(result));
+				setError(result.error || 'Error al iniciar sesión');
 			}
 		} catch (err) {
-			setError(getUserMessage({ code: 'ERR-999' })); // Error de conexión
+			setError('Error de conexión');
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	return (
-		<>
-			{/* Integración de Meta Datos */}
-			<HelmetMeta 
-				title={PAGE_META.LOGIN.title} 
-				description={PAGE_META.LOGIN.description} 
-				keywords={PAGE_META.LOGIN.keywords} 
-			/>
-
-			<div className="login">
-				<div className="login__card">
-					{/* Imagen con constantes de src y alt */}
+		<div className="login">
+			<div className="login__card">
+				<h1 className="login__title">File Renamer</h1>
+				<h2 className="login__subtitle">Iniciar Sesión</h2>
+				
+				<form className="login__form" onSubmit={handleSubmit} noValidate>
+					<div className="login__field">
+						<label className="login__label">Email</label>
+						<input
+							type="text"
+							className="login__input"
+							value={email}
+							onChange={handleEmailChange}
+						/>
+						{emailError && <span className="login__field-error">{emailError}</span>}
+					</div>
 					
-					{/*
-					<img 
-						src={IMAGES.LOGO.src} 
-						alt={IMAGES.LOGO.alt} 
-						className="login__logo" 
-						aria-label={IMAGES.LOGO.ariaLabel}
-					/>
-					*/}
+					<div className="login__field">
+						<label className="login__label">Contraseña</label>
+						<input
+							type="password"
+							className="login__input"
+							value={password}
+							onChange={handlePasswordChange}
+						/>
+						{passwordError && <span className="login__field-error">{passwordError}</span>}
+					</div>
 					
-					<h1 className="login__title">File Renamer</h1>
-					<h2 className="login__subtitle">Iniciar Sesión</h2>
-
-					<form className="login__form" onSubmit={handleSubmit} noValidate>
-						<div className="login__field">
-							<label className="login__label">Email</label>
-							<input
-								type="email"
-								className="login__input"
-								value={email}
-								onChange={handleEmailChange}
-								placeholder="ejemplo@correo.com"
-							/>
-							{emailError && <span className="login__field-error">{emailError}</span>}
-						</div>
-
-						<div className="login__field">
-							<label className="login__label">Contraseña</label>
-							<input
-								type="password"
-								className="login__input"
-								value={password}
-								onChange={handlePasswordChange}
-								placeholder="******"
-							/>
-							{passwordError && <span className="login__field-error">{passwordError}</span>}
-						</div>
-
-						{error && <div className="login__error-message">{error}</div>}
-
-						{/* Uso de clases globales btn + clase específica */}
-						<button
-							type="submit"
-							className="btn btn--primary login__button"
-							disabled={isLoading}
-						>
-							{isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
-						</button>
-
-						<button
-							type="button"
-							className="login__link-button"
-							onClick={() => navigate(INTERNAL_ROUTES.REGISTER)}
-						>
-							¿No tienes cuenta? Regístrate
-						</button>
-					</form>
-				</div>
+					{error && <div className="login__error">{error}</div>}
+					
+					<button
+						type="submit"
+						className="login__button"
+						disabled={isLoading}
+					>
+						{isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
+					</button>
+					
+					<button
+						type="button"
+						className="login__link-button"
+						onClick={() => navigate('/register')}
+					>
+						¿No tienes cuenta? Regístrate
+					</button>
+				</form>
 			</div>
-		</>
+		</div>
 	);
 };
 

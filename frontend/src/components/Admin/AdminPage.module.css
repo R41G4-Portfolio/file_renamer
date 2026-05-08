@@ -1,0 +1,359 @@
+.adminPage {
+	min-height: 100vh;
+	background-color: #f5f5f5;
+}
+
+.main {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 30px 20px;
+}
+
+.main h2 {
+	margin-bottom: 20px;
+	color: #2c3e50;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+/* Contenedor de la tabla */
+.tableContainer {
+	background: white;
+	border-radius: 12px;
+	padding: 20px;
+	overflow-x: auto;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Tabla principal */
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.table th,
+.table td {
+	padding: 12px 8px;
+	text-align: left;
+	border-bottom: 1px solid #eee;
+}
+
+.table th {
+	background-color: #2c3e50;
+	color: white;
+	font-weight: 600;
+	padding: 12px 8px;
+}
+
+/* Anchos específicos de columnas */
+.table th:first-child,
+.table td:first-child {
+	padding-left: 16px;
+}
+
+.table th:last-child,
+.table td:last-child {
+	padding-right: 16px;
+}
+
+/* Columna título - más ancha */
+.table th:first-child {
+	width: 25%;
+}
+
+/* Columna estado */
+.table th:nth-child(2),
+.table td:nth-child(2) {
+	width: 10%;
+}
+
+/* Columna asignado a */
+.table th:nth-child(3),
+.table td:nth-child(3) {
+	width: 15%;
+}
+
+/* Columna filas */
+.table th:nth-child(4),
+.table td:nth-child(4) {
+	width: 6%;
+	text-align: center;
+}
+
+/* Columna archivos subidos */
+.table th:nth-child(5),
+.table td:nth-child(5) {
+	width: 15%;
+	text-align: center;
+}
+
+/* Columna fecha */
+.table th:nth-child(6),
+.table td:nth-child(6) {
+	width: 12%;
+}
+
+/* Columna acciones */
+.table th:last-child,
+.table td:last-child {
+	width: 15%;
+	text-align: center;
+}
+
+/* Badges de estado */
+.statusBadge {
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.statusActive {
+	background-color: #3498db;
+	color: white;
+}
+
+.statusCompleted {
+	background-color: #27ae60;
+	color: white;
+}
+
+.statusCancelled {
+	background-color: #95a5a6;
+	color: white;
+}
+
+/* Botones de acción */
+.cancelBtn {
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: 500;
+	transition: background-color 0.2s;
+}
+
+.cancelBtn:hover {
+	background-color: #c0392b;
+}
+
+.downloadLink {
+	background-color: #3498db;
+	color: white;
+	padding: 6px 12px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: 500;
+	display: inline-block;
+	transition: background-color 0.2s;
+}
+
+.downloadLink:hover {
+	background-color: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.main {
+		padding: 20px 15px;
+	}
+	
+	.table th,
+	.table td {
+		padding: 8px 6px;
+		font-size: 12px;
+	}
+	
+	.cancelBtn,
+	.downloadLink {
+		padding: 4px 8px;
+		font-size: 11px;
+	}
+}
+
+.pendingBadge {
+	background-color: #f39c12;
+	color: white;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-size: 12px;
+	display: inline-block;
+}
+
+.noAction {
+	color: #95a5a6;
+	font-size: 14px;
+}
+
+/* Auditoría */
+.auditContainer {
+	background: white;
+	border-radius: 12px;
+	padding: 20px;
+	margin-top: 30px;
+	overflow-x: auto;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.auditContainer h3 {
+	margin-bottom: 20px;
+	color: #2c3e50;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.auditTable {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.auditTable th,
+.auditTable td {
+	padding: 10px 8px;
+	text-align: left;
+	border-bottom: 1px solid #eee;
+}
+
+.auditTable th {
+	background-color: #34495e;
+	color: white;
+	font-weight: 600;
+}
+
+.auditLoading {
+	text-align: center;
+	padding: 40px;
+	color: #666;
+}
+
+.auditEmpty {
+	text-align: center;
+	padding: 40px;
+	color: #999;
+}
+
+/* Colores por acción */
+.actionLogin {
+	color: #3498db;
+	font-weight: 500;
+}
+
+.actionLogout {
+	color: #95a5a6;
+}
+
+.actionUploadTemplate {
+	color: #2c3e50;
+	font-weight: 500;
+}
+
+.actionUploadFile {
+	color: #27ae60;
+	font-weight: 500;
+}
+
+.actionGenerateZip {
+	color: #f39c12;
+	font-weight: 500;
+}
+
+.actionDownloadZip {
+	color: #3498db;
+	font-weight: 500;
+}
+
+.actionApprove {
+	color: #27ae60;
+	font-weight: 500;
+}
+
+.actionCancel {
+	color: #e74c3c;
+	font-weight: 500;
+}
+
+/* Filtros de auditoría */
+.auditFilters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 20px;
+	padding: 15px;
+	background-color: #f8f9fa;
+	border-radius: 8px;
+}
+
+.auditFilters select,
+.auditFilters input {
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+	background-color: white;
+}
+
+.filterApplyBtn {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.filterApplyBtn:hover {
+	background-color: #2980b9;
+}
+
+.filterResetBtn {
+	background-color: #95a5a6;
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.filterResetBtn:hover {
+	background-color: #7f8c8d;
+}
+
+.auditTableWrapper {
+	overflow-x: auto;
+}
+
+.auditTargetId {
+	font-family: monospace;
+	font-size: 12px;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+	.auditFilters {
+		flex-direction: column;
+	}
+	
+	.auditFilters select,
+	.auditFilters input,
+	.auditFilters button {
+		width: 100%;
+	}
+}
+
+.filterLabel {
+	font-size: 14px;
+	color: #2c3e50;
+	display: inline-flex;
+	align-items: center;
+	margin-right: 4px;
+}

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
+import './Header.css';
 
 const Header = ({ title, showBackButton = false, backPath = '/dashboard' }) => {
 	const navigate = useNavigate();

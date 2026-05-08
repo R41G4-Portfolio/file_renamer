@@ -1,4 +1,5 @@
 import { HashLoader } from "react-spinners";
+import "./Spinner.css";
 
 const Spinner = ({ size = 120, color = "#333333", fullPage = true }) => {
 	if (fullPage) {

@@ -1,7 +1,56 @@
-@import './css/base.css';
-@import './css/layout.css';
-@import './css/auth.css';
-@import './css/admin.css';
-@import './css/dashboard.css';
-@import './css/upload.css';
-@import './css/components.css';
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f5f5f5;
+}
+
+/* Clases de validación*/
+
+/* Clase global para mensajes de error en cualquier formulario */
+.field-error {
+	color: #e74c3c;
+	font-size: 12px;
+	margin-left: 12px;
+	white-space: nowrap;
+}
+
+/* Responsive: en móviles, el error debajo */
+@media (max-width: 480px) {
+	.field-error {
+		white-space: normal;
+		margin-left: 0;
+		margin-top: 4px;
+		display: block;
+	}
+}
+
+/* Contenedor flexible para input + error */
+.input-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+	.input-wrapper {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+.downloader-page {
+	min-height: 100vh;
+	background-color: #f5f5f5;
+}
+
+.downloader-page__main {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 30px 20px;
+}

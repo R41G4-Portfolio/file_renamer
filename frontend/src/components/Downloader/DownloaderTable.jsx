@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './DownloaderTable.module.css';
 
 const DownloaderTable = ({ assignments, onUpload }) => {
 	const [uploading, setUploading] = useState({});
@@ -23,8 +24,8 @@ const DownloaderTable = ({ assignments, onUpload }) => {
 	};
 
 	return (
-		<div className="tableContainer">
-			<table className="table">
+		<div className={styles.tableContainer}>
+			<table className={styles.table}>
 				<thead>
 					<tr>
 						<th>Ruta</th>
@@ -41,41 +42,40 @@ const DownloaderTable = ({ assignments, onUpload }) => {
 							<td>{assignment.ruta}</td>
 							<td>{assignment.nombreDeseado}</td>
 							<td>
-								{/*<span className={`statusBadge} ${styles[assignment.status?.toLowerCase()]}`}> */}
-								<span className='statusBadge'>
+								<span className={`${styles.statusBadge} ${styles[assignment.status?.toLowerCase()]}`}>
 									{assignment.status === 'PENDING' ? 'Pendiente' : 'Subido'}
 								</span>
 								</td>
-								<td className="fileCell">
+								<td className={styles.fileCell}>
 									<input
 										type="file"
 										id={`file-${assignment.id}`}
 										accept=".pdf,.jpg,.jpeg,.png,.docx"
 										disabled={assignment.status === 'UPLOADED'}
-										className="fileInput"
+										className={styles.fileInput}
 									/>
 									{assignment.filePath && (
-										<span className="fileName">
+										<span className={styles.fileName}>
 											{assignment.originalName?.substring(0, 20)}...
 										</span>
 									)}
 								</td>
-								<td className="actionCell">
+								<td className={styles.actionCell}>
 									<button
-										className="uploadBtn"
+										className={styles.uploadBtn}
 										onClick={() => handleUpload(assignment.id)}
 										disabled={assignment.status === 'UPLOADED' || uploading[assignment.id]}
 									>
 										{uploading[assignment.id] ? 'Subiendo...' : 'Subir'}
 									</button>
 								</td>
-								<td className="previewCell">
+								<td className={styles.previewCell}>
 									{assignment.filePath && (
 										<a
 											href={`http://localhost:5000/${assignment.filePath}`}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="previewLink"
+											className={styles.previewLink}
 										>
 											Ver
 										</a>

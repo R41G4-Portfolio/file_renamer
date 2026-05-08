@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import styles from './AdminPage.module.css';
 
 const AdminAuditTable = () => {
 	const [auditLogs, setAuditLogs] = useState([]);
@@ -180,26 +180,26 @@ const AdminAuditTable = () => {
 	};
 
 	if (loading) {
-		return <div className="auditLoading">Cargando auditoría...</div>;
+		return <div className={styles.auditLoading}>Cargando auditoría...</div>;
 	}
 
 	return (
-		<div className="auditContainer">
+		<div className={styles.auditContainer}>
 			<h3>Movimientos recientes</h3>
 			
-			<div className="auditStats">
-				<span className="auditStat">
+			<div className={styles.auditStats}>
+				<span className={styles.auditStat}>
 					📊 Usuarios distintos: <strong>{stats.totalUsers}</strong>
 				</span>
-				<span className="styles.auditStat">
+				<span className={styles.auditStat}>
 					📋 Acciones distintas: <strong>{stats.totalActions}</strong>
 				</span>
-				<span className="auditStat">
+				<span className={styles.auditStat}>
 					📝 Total registros: <strong>{auditLogs.length}</strong>
 				</span>
 			</div>
 			
-			<div className="auditFilters">
+			<div className={styles.auditFilters}>
 				<select name="userId" value={filters.userId} onChange={handleFilterChange}>
 					<option value="">Todos los usuarios</option>
 					{users.map(user => (
@@ -213,14 +213,14 @@ const AdminAuditTable = () => {
 						<option key={action} value={action}>{getActionText(action)}</option>
 					))}
 				</select>
-				<label className="filterLabel">Desde:</label>
+				<label className={styles.filterLabel}>Desde:</label>
 				<input
 					type="date"
 					name="startDate"
 					value={filters.startDate}
 					onChange={handleFilterChange}
 				/>
-				<label className="filterLabel">Hasta:</label>
+				<label className={styles.filterLabel}>Hasta:</label>
 				<input
 					type="date"
 					name="endDate"
@@ -228,17 +228,17 @@ const AdminAuditTable = () => {
 					onChange={handleFilterChange}
 				/>
 				
-				<button className="filterApplyBtn" onClick={handleApplyFilters}>
+				<button className={styles.filterApplyBtn} onClick={handleApplyFilters}>
 					Filtrar
 				</button>
 				
-				<button className="filterResetBtn" onClick={handleResetFilters}>
+				<button className={styles.filterResetBtn} onClick={handleResetFilters}>
 					Limpiar
 				</button>
 			</div>
 			
-			<div className="auditTableWrapper">
-				<table className="styles.auditTable">
+			<div className={styles.auditTableWrapper}>
+				<table className={styles.auditTable}>
 					<thead>
 						<tr>
 							<th>Usuario</th>
@@ -265,7 +265,7 @@ const AdminAuditTable = () => {
 			</div>
 			
 			{filteredLogs.length === 0 && (
-				<p className="auditEmpty">No hay registros de auditoría</p>
+				<p className={styles.auditEmpty}>No hay registros de auditoría</p>
 			)}
 		</div>
 	);

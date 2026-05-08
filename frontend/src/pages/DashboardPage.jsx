@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Header, Footer } from '../components/Layout';
 import Dashboard from '../components/Dashboard/Dashboard';
 
 const DashboardPage = () => {
@@ -7,11 +8,12 @@ const DashboardPage = () => {
 	}, []);
 
 	return (
-		/* Esta clase 'layout-container' es la que activará el flex */
-		<div className="layout-container">
+		<div className="dashboard-page">
+			<Header title="File Renamer" />
 			<main className="dashboard-page__main">
 				<Dashboard />
 			</main>
+			<Footer />
 		</div>
 	);
 };

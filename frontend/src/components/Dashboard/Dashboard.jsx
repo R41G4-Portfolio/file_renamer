@@ -1,78 +1,103 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { api } from '../../services/api';
-
-// Componentes
-import TemplatesTable from './TemplatesTable';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '../Spinner';
-
-// Utilidades y Constantes
-import Swal from 'sweetalert2';
-import { INTERNAL_ROUTES } from '../../constants/routes';
+import TemplateTable from './TemplatesTable';
+import TemplateDetails from './TemplateDetails';
+import { api } from '../../services/api';
+import './Dashboard.css';
 
 const Dashboard = () => {
-    const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth();
-    const [loading, setLoading] = useState(true);
-    const [templates, setTemplates] = useState([]);
+	const navigate = useNavigate();
+	const { user, logout } = useAuth();
+	const [loading, setLoading] = useState(true);
+	const [templates, setTemplates] = useState([]);
+	const [selectedTemplateId, setSelectedTemplateId] = useState(null);
+	const [showDetails, setShowDetails] = useState(false);
 
-    // Efecto para cargar los datos cuando el usuario está autenticado
-    useEffect(() => {
-        if (user) {
-            fetchTemplates();
-        } else {
-            setLoading(false);
-        }
-    }, [user, isAuthenticated]);
+	useEffect(() => {
+		if (user) {
+			fetchTemplates();
+		}
+	}, [user]);
 
-    const fetchTemplates = async () => {
-        try {
-            setLoading(true);
-            const response = await api.getTemplates();
-            
-            if (response.success && response.data) {
-                setTemplates(response.data);
-            }
-        } catch (error) {
-            console.error('Dashboard Error:', error);
-            Swal.fire({
-                title: 'Error',
-                text: error.message || 'No se pudieron cargar las plantillas',
-                icon: 'error',
-                confirmButtonColor: '#28a745'
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+	const fetchTemplates = async () => {
+		try {
+			const data = await api.getTemplates();
+			setTemplates(data);
+		} catch (error) {
+			console.error('Error:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-    if (loading) return <Spinner />;
+	const handleLogout = async () => {
+		await logout();
+		navigate('/login');
+	};
 
-    return (
-        <div className="dashboard">
-            {/* Contenedor de acciones superiores */}
-            <div className="dashboard__actions">
-                {(user?.role === 'ADMIN' || user?.role === 'UPLOADER') && (
-                    <button
-                        className="btn btn--success dashboard__create-btn"
-                        onClick={() => navigate(INTERNAL_ROUTES.UPLOAD)}
-                    >
-                        <span>+</span> Crear tarea nueva
-                    </button>
-                )}
-            </div>
+	const handleViewDetails = (templateId) => {
+		setSelectedTemplateId(templateId);
+		setShowDetails(true);
+	};
 
-            {/* Contenedor de la tabla de datos */}
-            <div className="dashboard__content">
-                <TemplatesTable
-                    templates={templates}
-                    user={user}
-                    onRefresh={fetchTemplates}
-                />
-            </div>
-        </div>
-    );
+	const handleCloseDetails = () => {
+		setShowDetails(false);
+		setSelectedTemplateId(null);
+	};
+
+	if (loading)
+		return <Spinner />;
+
+	return (
+		<div className="dashboard">
+			<header className="dashboard__header">
+				<h1 className="dashboard__title">File Renamer</h1>
+				<div className="dashboard__user-info">
+					<span className="dashboard__user-name">{user?.name}</span>
+					<span className="dashboard__user-role">{user?.role}</span>
+					<button className="dashboard__logout" onClick={handleLogout}>
+						Cerrar sesión
+					</button>
+				</div>
+			</header>
+
+			<main className="dashboard__main">
+				<div className="dashboard__actions">
+					{(user?.role === 'ADMIN' || user?.role === 'UPLOADER') && (
+						<button 
+							className="dashboard__create-btn"
+							onClick={() => navigate('/upload')}
+						>
+							+ Crear tarea nueva
+						</button>
+					)}
+				</div>
+
+				<TemplateTable 
+					templates={templates} 
+					user={user}
+					onViewDetails={handleViewDetails}
+					onRefresh={fetchTemplates}
+				/>
+
+				{/* Modal de detalles (no ruta, no URL expuesta) */}
+				{showDetails && (
+					<div className="modal-overlay" onClick={handleCloseDetails}>
+						<div className="modal-content modal-content--large" onClick={(e) => e.stopPropagation()}>
+							<button className="modal-close" onClick={handleCloseDetails}>✕</button>
+							<TemplateDetails 
+								templateId={selectedTemplateId}
+								onClose={handleCloseDetails}
+								onRefresh={fetchTemplates}
+							/>
+						</div>
+					</div>
+				)}
+			</main>
+		</div>
+	);
 };
 
 export default Dashboard;

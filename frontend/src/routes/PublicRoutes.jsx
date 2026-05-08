@@ -2,22 +2,18 @@ import Spinner from '../components/Spinner';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-import { INTERNAL_ROUTES } from '../constants/routes';
-
 const PublicRoute = ({ children }) => {
-    const { isAuthenticated, loading, user } = useAuth();
+	const { isAuthenticated, loading } = useAuth();
 
-    if (loading) return <Spinner />;
+	if (loading)
+		return <Spinner />;
 
-    if (isAuthenticated) {
-        // Si ya entró, lo mandamos a su sitio correspondiente según rol
-        if (user?.role === 'DOWNLOADER') {
-            return <Navigate to={INTERNAL_ROUTES.ASSIGNMENTS} replace />;
-        }
-        return <Navigate to={INTERNAL_ROUTES.DASHBOARD} replace />;
-    }
+	// Si ya está autenticado, redirige al dashboard
+	if (isAuthenticated) {
+		return <Navigate to="/dashboard" />;
+	}
 
-    return children;
+	return children;
 };
 
 export default PublicRoute;

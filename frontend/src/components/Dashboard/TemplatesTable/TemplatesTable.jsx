@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import TemplateDetails from '../TemplateDetails';
 import Swal from 'sweetalert2';
-import { api } from '../../../services/api';
+import './TemplatesTable.css';
 
 const TemplatesTable = ({ templates, user, onRefresh }) => {
+	const [selectedTemplateId, setSelectedTemplateId] = useState(null);
 	const [assigningId, setAssigningId] = useState(null);
 	const [downloadersList, setDownloadersList] = useState([]);
 
+	// Cargar lista de downloaders
 	const loadDownloaders = async () => {
 		if (downloadersList.length > 0) return downloadersList;
 		try {
@@ -23,17 +25,30 @@ const TemplatesTable = ({ templates, user, onRefresh }) => {
 		}
 	};
 
+	// Asignar usuario
 	const handleAssign = async (templateId, email) => {
 		try {
-			await api.assignTemplate(templateId, email);
-			Swal.fire('Éxito', 'Usuario asignado correctamente', 'success');
-			if (onRefresh) onRefresh();
+			const response = await fetch(`http://localhost:5000/templates/${templateId}/assign`, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				credentials: 'include',
+				body: JSON.stringify({ email })
+			});
+			
+			if (response.ok) {
+				Swal.fire('Éxito', 'Usuario asignado correctamente', 'success');
+				if (onRefresh) onRefresh();
+			} else {
+				const error = await response.json();
+				Swal.fire('Error', error.error || 'Error al asignar', 'error');
+			}
 		} catch (error) {
-			Swal.fire('Error', error.message || 'Error al asignar', 'error');
+			Swal.fire('Error', 'Error al asignar usuario', 'error');
 		}
 		setAssigningId(null);
 	};
 
+	// Abrir select para asignar
 	const openAssignSelect = async (templateId) => {
 		const downloaders = await loadDownloaders();
 		if (downloaders.length === 0) {
@@ -43,10 +58,13 @@ const TemplatesTable = ({ templates, user, onRefresh }) => {
 		setAssigningId(templateId);
 	};
 
-	const handleViewDetails = (templateId) => {
+	// Modal de detalles
+	const handleViewDetails = async (templateId) => {
+		setSelectedTemplateId(templateId);
+		
 		const container = document.createElement('div');
-
-		Swal.fire({
+		
+		await Swal.fire({
 			title: 'Detalles de la plantilla',
 			html: container,
 			width: '95%',
@@ -58,13 +76,16 @@ const TemplatesTable = ({ templates, user, onRefresh }) => {
 				container.appendChild(rootContainer);
 				const root = createRoot(rootContainer);
 				root.render(
-					<TemplateDetails
+					<TemplateDetails 
 						templateId={templateId}
 						user={user}
 						onClose={() => Swal.close()}
 						onRefresh={onRefresh}
 					/>
 				);
+			},
+			willClose: () => {
+				setSelectedTemplateId(null);
 			}
 		});
 	};
@@ -90,11 +111,11 @@ const TemplatesTable = ({ templates, user, onRefresh }) => {
 							<td>{template.rowCount}</td>
 							<td>
 								<span className={`status-badge status-badge--${template.status?.toLowerCase()}`}>
-									{template.status === 'ACTIVE' ? 'Activa' :
-										template.status === 'COMPLETED' ? 'Completada' : 'Cancelada'}
+									{template.status === 'ACTIVE' ? 'Activa' : 
+									 template.status === 'COMPLETED' ? 'Completada' : 'Cancelada'}
 								</span>
-							</td>
-							<td className="dashboard__assign-cell">
+								</td>
+							 <td>
 								{assigningId === template.id ? (
 									<select
 										className="dashboard__assign-select"
@@ -114,7 +135,7 @@ const TemplatesTable = ({ templates, user, onRefresh }) => {
 									<div className="dashboard__assign-display">
 										<span>{template.assignedTo?.name || 'No asignado'}</span>
 										{(user?.role === 'ADMIN' || user?.role === 'UPLOADER') && template.status === 'ACTIVE' && (
-											<button
+											<button 
 												className="dashboard__assign-btn"
 												onClick={() => openAssignSelect(template.id)}
 											>
@@ -123,15 +144,15 @@ const TemplatesTable = ({ templates, user, onRefresh }) => {
 										)}
 									</div>
 								)}
-							</td>
+							 </td>
 							<td className="dashboard__actions-cell">
-								<button
+								<button 
 									className="dashboard__action-btn dashboard__action-btn--details"
 									onClick={() => handleViewDetails(template.id)}
 								>
 									Ver detalles
 								</button>
-							</td>
+							 </td>
 						</tr>
 					))}
 				</tbody>

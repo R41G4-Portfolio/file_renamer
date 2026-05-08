@@ -1,0 +1,62 @@
+/* UploadBase.css - Estilos base para la página de subida */
+
+/* upload-page: Contenedor principal de la página de subida de plantillas */
+.upload-page {
+	min-height: 100vh;
+	background-color: #f5f5f5;
+}
+
+/* upload-page__main: Contenedor del contenido principal, centra la tarjeta */
+.upload-page__main {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 40px 20px;
+}
+
+/* upload-page__card: Tarjeta blanca que contiene el formulario de subida */
+.upload-page__card {
+	background: white;
+	border-radius: 12px;
+	padding: 30px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* upload-page__card h2: Título dentro de la tarjeta */
+.upload-page__card h2 {
+	color: #2c3e50;
+	margin-bottom: 10px;
+}
+
+/* upload-page__card p: Descripción dentro de la tarjeta */
+.upload-page__card p {
+	color: #666;
+	margin-bottom: 20px;
+	font-size: 14px;
+}
+
+/* upload-page__unauthorized: Pantalla de acceso denegado */
+.upload-page__unauthorized {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	gap: 20px;
+	text-align: center;
+	padding: 20px;
+}
+
+/* upload-page__unauthorized h2: Título de acceso denegado */
+.upload-page__unauthorized h2 {
+	color: #e74c3c;
+}
+
+/* upload-page__unauthorized button: Botón para volver al dashboard */
+.upload-page__unauthorized button {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 8px;
+	cursor: pointer;
+}

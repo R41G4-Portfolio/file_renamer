@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import Spinner from '../../Spinner';
 import { api } from '../../../services/api';
+import './TemplateDetails.css';
 
 const TemplateDetails = ({ templateId, user, onClose, onRefresh }) => {
 	const [loading, setLoading] = useState(true);

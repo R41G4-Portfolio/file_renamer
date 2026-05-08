@@ -4,76 +4,73 @@ import { api } from '../services/api';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
-/*
+
 export const AuthProvider = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
+	// Verificar autenticación al cargar la app
 	useEffect(() => {
-		const initAuth = async () => {
+		const checkAuth = async () => {
 			try {
-				const response = await api.getSessionData();
-				if (response.success && response.data) {
-					setUser(response.data);
-					setIsAuthenticated(true);
-				} else {
-					// Si el servidor dice que no, limpiamos
-					setIsAuthenticated(false);
-					setUser(null);
-				}
+				const userData = await api.getPerfil();
+				setUser(userData);
+				setIsAuthenticated(true);
 			} catch (error) {
 				setIsAuthenticated(false);
-				console.error("Sesión no válida");
+				setUser(null);
 			} finally {
 				setLoading(false);
 			}
 		};
-		initAuth();
+		checkAuth();
 	}, []);
 
+	// Iniciar sesión
 	const login = async (email, password) => {
-        try {
-            const response = await api.login({ email, password });
-            if (response.success && response.data) {
-                setUser({
-                    name: response.data.name,
-                    email: response.data.email,
-                    role: response.data.role
-                });
-                setIsAuthenticated(true);
-                return { success: true };
-            }
-            return { success: false, error: response.message };
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    };
-
-	const register = async (userData) => {
 		try {
-			const response = await api.register(userData);
-			if (response.success) {
+			// Primero intentar cerrar sesión (limpia cookie en backend)
+			await fetch('http://localhost:5000/auth/logout', {
+				method: 'POST',
+				credentials: 'include'
+			});
+			
+			const result = await api.login({ email, password });
+			
+			if (result.message && result.message.includes('Sesión iniciada')) {
+				const userData = await api.getPerfil();
+				setUser(userData);
+				setIsAuthenticated(true);
 				return { success: true };
 			}
-			return { success: false, error: response.message };
+			
+			return { success: false, error: result.error };
+		} catch (error) {
+			return { success: false, error: 'Error de conexión' };
+		}
+	};
+
+	// Registrar usuario
+	const register = async (userData) => {
+		try {
+			await api.register(userData);
+			return { success: true };
 		} catch (error) {
 			return { success: false, error: error.message };
 		}
 	};
 
+	// Cerrar sesión
 	const logout = async () => {
-        try {
-            await api.logout();
-        } catch (error) {
-            console.error('Error en logout:', error);
-        } finally {
-            setIsAuthenticated(false);
-            setUser(null);
-            // No intentamos borrar la cookie por JS si es httpOnly, 
-            // el backend ya debió enviar el Set-Cookie de borrado.
-        }
-    };
+		try {
+			await api.logout();
+			setUser(null);
+			setIsAuthenticated(false);
+		} catch (error) {
+			console.error('Error en logout:', error);
+		}
+	};
 
 	return (
 		<AuthContext.Provider value={{
@@ -87,38 +84,4 @@ export const AuthProvider = ({ children }) => {
 			{children}
 		</AuthContext.Provider>
 	);
-};
-*/
-
-// src/contexts/AuthContext.jsx
-export const AuthProvider = ({ children }) => {
-    // FORZAMOS ESTADO AUTENTICADO PARA PRUEBAS DE ESTILO
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
-    const [user, setUser] = useState({
-        name: 'Usuario Probeta',
-        email: 'test@example.com',
-        role: 'ADMIN' // Cámbialo aquí a 'DOWNLOADER' o 'UPLOADER' para probar cada vista
-    });
-    const [loading, setLoading] = useState(false); // Siempre false para no ver el spinner
-
-    // Deja las funciones vacías por ahora para que no truene al hacer click
-    const login = async () => ({ success: true });
-    const register = async () => ({ success: true });
-    const logout = () => {
-        setIsAuthenticated(false);
-        console.log("Logout simulado");
-    };
-
-    return (
-        <AuthContext.Provider value={{
-            isAuthenticated,
-            user,
-            loading,
-            login,
-            register,
-            logout
-        }}>
-            {children}
-        </AuthContext.Provider>
-    );
 };

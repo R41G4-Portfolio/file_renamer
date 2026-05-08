@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { api } from '../../services/api';
+import styles from './AdminPage.module.css';
 
 const AdminTable = ({ templates, onRefresh }) => {
 	const handleCancelTemplate = async (templateId) => {
@@ -43,8 +44,8 @@ const AdminTable = ({ templates, onRefresh }) => {
 	};
 
 	return (
-		<div className="tableContainer">
-			<table className="table">
+		<div className={styles.tableContainer}>
+			<table className={styles.table}>
 				<thead>
 					<tr>
 						<th>Título</th>
@@ -75,7 +76,7 @@ const AdminTable = ({ templates, onRefresh }) => {
 								<td style={{ textAlign: 'center' }}>
 									{template.status === 'ACTIVE' && (
 										<button 
-											className="styles.cancelBtn"
+											className={styles.cancelBtn}
 											onClick={() => handleCancelTemplate(template.id)}
 										>
 											Cancelar
@@ -84,24 +85,23 @@ const AdminTable = ({ templates, onRefresh }) => {
 									{template.zipPath && (
 										<a 
 											href={`http://localhost:5000/zip/download/${template.id}`}
-											className="downloadLink"
+											className={styles.downloadLink}
 										>
 											Descargar ZIP
 										</a>
 									)}
 									{template.status === 'COMPLETED' && !template.zipPath && (
 										<button 
-											className="generateBtn"
+											className={styles.generateBtn}
 											onClick={() => {
 												// TODO: implementar generación de ZIP
 											}}
 										>
-
 											Generar ZIP
 										</button>
 									)}
 									{template.status !== 'ACTIVE' && !template.zipPath && template.status !== 'COMPLETED' && (
-										<span className="noAction">—</span>
+										<span className={styles.noAction}>—</span>
 									)}
 								</td>
 							</tr>

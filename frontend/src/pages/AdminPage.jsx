@@ -5,6 +5,7 @@ import { AdminStats, AdminTable, AdminAuditTable } from '../components/Admin';
 import { api } from '../services/api';
 import Spinner from '../components/Spinner';
 import Swal from 'sweetalert2';
+import styles from '../components/Admin/AdminPage.module.css';
 
 const AdminPage = () => {
 	const { user } = useAuth();
@@ -47,8 +48,9 @@ const AdminPage = () => {
 	if (loading) return <Spinner />;
 
 	return (
-		<div className="adminPage">
-			<main className="main">
+		<div className={styles.adminPage}>
+			<Header title="File Renamer - Admin" />
+			<main className={styles.main}>
 				<h2>Panel de monitoreo</h2>
 				<AdminStats stats={stats} />
 				<AdminTable templates={templates} onRefresh={fetchData} />

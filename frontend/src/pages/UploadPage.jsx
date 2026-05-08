@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Header } from '../components/Layout';
 import ExcelUploader from '../components/Upload/ExcelUploader';
+import '../components/Upload/UploadBase.css';
 
 const UploadPage = () => {
 	const navigate = useNavigate();
@@ -29,6 +30,11 @@ const UploadPage = () => {
 
 	return (
 		<div className="upload-page">
+			<Header 
+				title="File Renamer" 
+				showBackButton={true} 
+				backPath="/dashboard" 
+			/>
 			<main className="upload-page__main">
 				<div className="upload-page__card">
 					<h2>Subir plantilla Excel</h2>

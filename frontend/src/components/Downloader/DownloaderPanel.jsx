@@ -4,6 +4,7 @@ import { api } from '../../services/api';
 import Swal from 'sweetalert2';
 import Spinner from '../Spinner';
 import DownloaderTable from './DownloaderTable';
+import styles from './DownloaderPanel.module.css';
 
 const DownloaderPanel = () => {
 	const { user } = useAuth();
@@ -49,18 +50,16 @@ const DownloaderPanel = () => {
 	if (loading) return <Spinner />;
 
 	return (
-		<div className="downloaderPanel">
+		<div className={styles.downloaderPanel}>
 			<h2>Mis tareas asignadas</h2>
 			
 			{templates.length === 0 ? (
-				<p className="empty">
-					No tienes tareas asignadas.
-				</p>
+				<p className={styles.empty}>No tienes tareas asignadas.</p>
 			) : (
 				templates.map(template => (
-					<div key={template.id} className="templateCard">
+					<div key={template.id} className={styles.templateCard}>
 						<h3>{template.title || 'Sin título'}</h3>
-						<div className="templateInfo">
+						<div className={styles.templateInfo}>
 							<span>Estado: {template.status === 'ACTIVE' ? 'Activa' : 'Completada'}</span>
 							<span>Fecha: {new Date(template.uploadedAt).toLocaleDateString()}</span>
 						</div>

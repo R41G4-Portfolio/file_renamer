@@ -1,0 +1,222 @@
+/* dashboard: Contenedor principal */
+.dashboard {
+	min-height: 100vh;
+	background-color: #f5f5f5;
+}
+
+/* dashboard__header: Barra superior */
+.dashboard__header {
+	background-color: #2c3e50;
+	color: white;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 15px;
+}
+
+/* dashboard__title: Título */
+.dashboard__title {
+	font-size: 24px;
+	font-weight: 600;
+}
+
+/* dashboard__user-info: Info del usuario */
+.dashboard__user-info {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	flex-wrap: wrap;
+}
+
+/* dashboard__user-name: Nombre del usuario */
+.dashboard__user-name {
+	font-weight: 500;
+}
+
+/* dashboard__user-role: Badge del rol */
+.dashboard__user-role {
+	background-color: #3498db;
+	padding: 5px 12px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+/* dashboard__logout: Botón cerrar sesión */
+.dashboard__logout {
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.3s;
+}
+
+.dashboard__logout:hover {
+	background-color: #c0392b;
+}
+
+/* dashboard__main: Contenido principal */
+.dashboard__main {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 30px 20px;
+}
+
+/* dashboard__actions: Área de acciones */
+.dashboard__actions {
+	margin-bottom: 30px;
+}
+
+/* dashboard__create-btn: Botón crear tarea */
+.dashboard__create-btn {
+	background-color: #27ae60;
+	color: white;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 8px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.dashboard__create-btn:hover {
+	background-color: #1e8449;
+}
+
+/* dashboard__table-container: Contenedor de la tabla */
+.dashboard__table-container {
+	background: white;
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+	overflow-x: auto;
+}
+
+/* dashboard__table: Tabla */
+.dashboard__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.dashboard__table th,
+.dashboard__table td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+.dashboard__table th {
+	background-color: #2c3e50;
+	color: white;
+	font-weight: 600;
+}
+
+.dashboard__table tr:hover {
+	background-color: #f5f5f5;
+}
+
+/* dashboard__cancel-btn: Botón cancelar */
+.dashboard__cancel-btn {
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 12px;
+	transition: background-color 0.3s;
+}
+
+.dashboard__cancel-btn:hover {
+	background-color: #c0392b;
+}
+
+/* Status badges */
+.status-badge {
+	padding: 4px 10px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	display: inline-block;
+}
+
+.status-badge--active {
+	background-color: #3498db;
+	color: white;
+}
+
+.status-badge--completed {
+	background-color: #27ae60;
+	color: white;
+}
+
+.status-badge--cancelled {
+	background-color: #95a5a6;
+	color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.dashboard__header {
+		flex-direction: column;
+		text-align: center;
+	}
+	
+	.dashboard__user-info {
+		justify-content: center;
+	}
+	
+	.dashboard__main {
+		padding: 20px 15px;
+	}
+	
+	.dashboard__table th,
+	.dashboard__table td {
+		padding: 8px;
+		font-size: 14px;
+	}
+}
+
+/* dashboard__actions-cell: Celda de acciones */
+.dashboard__actions-cell {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+/* dashboard__action-btn: Botones base de acción */
+.dashboard__action-btn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	padding: 6px;
+	border-radius: 6px;
+	transition: background-color 0.2s;
+}
+
+.dashboard__action-btn:hover {
+	background-color: #ecf0f1;
+}
+
+.dashboard__action-btn--details {
+	color: #3498db;
+}
+
+.dashboard__action-btn--assign {
+	color: #f39c12;
+}
+
+.dashboard__action-btn--approve {
+	color: #27ae60;
+}
+
+.dashboard__action-btn--cancel {
+	color: #e74c3c;
+}

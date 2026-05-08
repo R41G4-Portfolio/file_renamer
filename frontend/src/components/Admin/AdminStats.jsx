@@ -1,3 +1,4 @@
+import './AdminStats.css'
 const AdminStats = ({ stats }) => {
 	return (
 		<table className="admin-stats-table">
