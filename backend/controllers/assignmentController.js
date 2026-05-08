@@ -32,10 +32,29 @@ export const uploadAssignmentFile = async (req, res) => {
 
 		// Verificar que el usuario sea el asignado o admin
 		const template = await findTemplateByIdForResponse(assignment.templateId);
-		if (req.user.role !== 'ADMIN' && template.assignedTo !== req.user.id) {
-			await fs.remove(req.file.path);
-			return res.status(403).json({ error: 'No tienes permiso para subir archivos a esta tarea' });
+		// Si template.assignedTo es un objeto (porque está populado), extraemos su _id
+		// Si es solo el string/UUID, lo usamos directamente
+		const assignedToData = template.assignedTo;
+		const assignedToId = String(assignedToData._id || assignedToData).trim();
+
+		const userId = String(req.user._id || req.user.id).trim();
+
+		console.log("Validando acceso para subir archivo:");
+		console.log("- Usuario logueado:", userId);
+		console.log("- Usuario asignado (extraído):", assignedToId);
+
+		const isAuthorized = req.user.role === 'ADMIN' || userId === assignedToId;
+
+		if (!isAuthorized) {
+			if (req.file && req.file.path) {
+				await fs.remove(req.file.path);
+			}
+			return res.status(403).json({ 
+				error: 'No tienes permiso para subir archivos',
+				details: `Comparando ${userId} contra ${assignedToId}` 
+			});
 		}
+
 
 		// Verificar que el assignment esté pendiente
 		if (assignment.status !== 'PENDING') {

@@ -1,0 +1,69 @@
+.upload-page__main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.upload-page__card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+/* UPLOADER FORMS (Excel & File) */
+.excel-uploader,
+.file-uploader {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.excel-uploader__field,
+.file-uploader__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.excel-uploader__input,
+.file-uploader__input {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* DIVIDER */
+.excel-uploader__divider {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    position: relative;
+    margin: 10px 0;
+}
+
+.excel-uploader__divider::before,
+.excel-uploader__divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+.excel-uploader__divider::before { left: 0; }
+.excel-uploader__divider::after { right: 0; }
+
+/* FEEDBACK MESSAGES */
+.upload-error, .upload-success {
+    padding: 10px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    text-align: center;
+}
+
+.upload-error { background-color: #fee; color: var(--danger-red); }
+.upload-success { background-color: #dfd; color: var(--success-green); }

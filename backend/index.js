@@ -60,6 +60,7 @@ app.use('/auth', authRoutes);
 app.use('/templates', templateRoutes);
 app.use('/assignments', assignmentRoutes);
 app.use('/zip', zipRoutes);
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 	setHeaders: (res, filePath) => {
 		if (filePath.endsWith('.pdf')) {
